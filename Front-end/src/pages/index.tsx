@@ -1,8 +1,23 @@
 import type { NextPage } from 'next'
 import Lista from '../ui/components/Lista/Lista'
 import Titulo from '../ui/components/Titulo/Titulo'
+import { Dialog, Grid, TextField, DialogActions, Button, Snackbar } from '@mui/material'
+import { useIndex } from '../data/hooks/pages/useIndex';
 
 const Home: NextPage = () => {
+  const {
+    listaPets,
+    petSelecionado,
+    setPetSelecionado,
+    email, 
+    setEmail,
+    valor,
+    setValor,
+    mensagem,
+    setMensagem,
+    adotar
+  } = useIndex();
+
   return (
     <div>
       <Titulo 
@@ -14,15 +29,58 @@ const Home: NextPage = () => {
           </span>
         } />    
         <Lista 
-          pets={[
-            {
-              id:1,
-              nome: 'Bidu',
-              historia: 'asdasdasdasd asaf asdfsdf dfsdf adfsdf ',
-              foto: 'https://super.abril.com.br/wp-content/uploads/2018/05/filhotes-de-cachorro-alcanc3a7am-o-c3a1pice-de-fofura-com-8-semanas1.png?quality=90&strip=info&resize=680,453'
-            }
-          ]}
+          pets={listaPets}
+          onSelect={(pet) => setPetSelecionado(pet) }
         /> 
+
+        <Dialog
+         open={petSelecionado !== null}
+         fullWidth
+         PaperProps={{ sx: { p: 5 }}}
+         onClose={() => setPetSelecionado(null)}
+        >
+          <Grid container spacing={2}> 
+            <Grid item xs={12}> 
+              <TextField 
+                label={'E-mail'}
+                type={ 'email' }
+                fullWidth
+                value={email}
+                onChange={(e)=> setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField 
+                label={'Quantia por mês'}
+                type={ 'number' }
+                fullWidth
+                value={valor}
+                onChange={(e)=> setValor(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+          <DialogActions sx={{mt: 5}}>
+              <Button
+                color={'secondary'}
+                onClick={() => setPetSelecionado(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+               variant={'contained'}
+               onClick={() => adotar()}
+              >
+                Confirmar Adoção
+              </Button>
+            </DialogActions>
+        </Dialog>
+
+        <Snackbar 
+          open={mensagem.length > 0}
+          message={mensagem}
+          autoHideDuration={2500}
+          onClose={()=>setMensagem('')}
+        />
     </div>
   )
 }

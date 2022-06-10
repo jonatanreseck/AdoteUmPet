@@ -10,7 +10,6 @@ import{
 
 import { Pet } from '../../../data/@types/Pet'
 import { TextService } from '../../../data/services/TextService'
-import { getThemeProps } from '@mui/system';
 
 interface ListaProps{
     pets: Pet[];
